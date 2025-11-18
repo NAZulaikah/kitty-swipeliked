@@ -21,6 +21,7 @@ const progressFill = document.getElementById('progressFill');
 
 const likedListEl = document.getElementById('likedList');
 const likedSection = document.getElementById('likedSection');
+const likedCountEl = document.getElementById('likedCount');
 
 const likeSound = document.getElementById('likeSound');
 const dislikeSound = document.getElementById('dislikeSound');
@@ -37,26 +38,37 @@ function updateProgress(){
   progressText.textContent = `Cat ${Math.min(index+1,TOTAL)} of ${TOTAL}`;
   progressFill.style.width = `${Math.round((index/TOTAL)*100)}%`;
 }
+
 function showLiked(){
-  if(liked.length===0){ likedSection.classList.add('hidden'); return; }
+  if(liked.length===0){ likedSection.classList.add('hidden'); likedCountEl.textContent=''; return; }
   likedSection.classList.remove('hidden');
   likedListEl.innerHTML = '';
-  liked.forEach(url=>{ const img=document.createElement('img'); img.src=url; img.loading='lazy'; likedListEl.appendChild(img); });
+  liked.forEach(url=>{
+    const img=document.createElement('img'); img.src=url; img.loading='lazy';
+    likedListEl.appendChild(img);
+  });
+  likedCountEl.textContent = `❤️ You liked ${liked.length} cats`;
 }
+
 function renderCard(){
   if(index>=images.length){ index=0; generateImages(); }
   const url = images[index];
   cardImage.style.opacity = 0;
   cardImage.src = url;
-  cardImage.onload = () => { cardImage.style.opacity = 1; }
-
+  cardImage.onload = ()=>{ cardImage.style.opacity=1; }
   const nextUrl = images[index+1]||images[0];
   backCard.style.background = `url(${nextUrl}) center/cover no-repeat`;
   backCard.style.backgroundSize = 'cover';
   preloadAt(index+1);
   updateProgress();
 }
-function resetCardPosition(){ card.style.transition='none'; card.style.transform='translateX(0) rotate(0)'; hideOverlayIndicator(); requestAnimationFrame(()=>{card.style.transition='';}); }
+
+function resetCardPosition(){ 
+  card.style.transition='none'; 
+  card.style.transform='translateX(0) rotate(0)'; 
+  hideOverlayIndicator(); 
+  requestAnimationFrame(()=>{card.style.transition='';});
+}
 
 function showOverlayIndicator(kind){ 
   if(kind==='like'){ document.querySelector('.overlay-like').style.opacity='1'; } 
