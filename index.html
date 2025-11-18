@@ -1,0 +1,203 @@
+import React, { useState } from 'react';
+import { Heart, X, RotateCcw, ChevronLeft } from 'lucide-react';
+
+const Wireframes = () => {
+  const [activeScreen, setActiveScreen] = useState('swipe');
+
+  const MobileFrame = ({ children, title }) => (
+    <div className="flex flex-col items-center mb-8">
+      <div className="text-sm font-medium text-gray-600 mb-2">{title}</div>
+      <div className="w-80 h-[600px] bg-white rounded-3xl shadow-2xl border-8 border-gray-800 overflow-hidden relative">
+        {/* Notch */}
+        <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-32 h-6 bg-gray-800 rounded-b-2xl z-10"></div>
+        {children}
+      </div>
+    </div>
+  );
+
+  const SwipeScreen = () => (
+    <div className="h-full flex flex-col bg-gradient-to-b from-purple-50 to-pink-50">
+      {/* Header */}
+      <div className="pt-8 pb-4 px-6">
+        <h1 className="text-2xl font-bold text-center text-gray-800">Paws & Preferences</h1>
+        <p className="text-sm text-center text-gray-600 mt-1">Find your favorite kitty!</p>
+      </div>
+
+      {/* Progress bar */}
+      <div className="px-6 mb-4">
+        <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+          <div className="h-full w-1/3 bg-purple-500 rounded-full"></div>
+        </div>
+        <p className="text-xs text-center text-gray-500 mt-1">5 of 15 cats</p>
+      </div>
+
+      {/* Card Stack Area */}
+      <div className="flex-1 px-6 flex items-center justify-center relative">
+        {/* Back card */}
+        <div className="absolute w-full h-96 bg-white rounded-3xl shadow-lg border-4 border-dashed border-gray-300 transform scale-95 opacity-40"></div>
+        
+        {/* Front card */}
+        <div className="relative w-full h-96 bg-white rounded-3xl shadow-2xl overflow-hidden border-2 border-gray-200">
+          {/* Image placeholder */}
+          <div className="h-full bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center">
+            <div className="text-center">
+              <div className="w-24 h-24 mx-auto bg-gray-400 rounded-full mb-3"></div>
+              <p className="text-gray-500 font-medium">Cat Image</p>
+            </div>
+          </div>
+          
+          {/* Swipe indicators (overlay when swiping) */}
+          <div className="absolute top-8 left-8 w-24 h-24 border-8 border-red-500 rounded-2xl flex items-center justify-center opacity-0">
+            <X className="w-16 h-16 text-red-500" strokeWidth={3} />
+          </div>
+          <div className="absolute top-8 right-8 w-24 h-24 border-8 border-green-500 rounded-2xl flex items-center justify-center opacity-0">
+            <Heart className="w-16 h-16 text-green-500" strokeWidth={3} />
+          </div>
+        </div>
+      </div>
+
+      {/* Action buttons */}
+      <div className="px-6 py-6 flex justify-center gap-6">
+        <button className="w-16 h-16 bg-white rounded-full shadow-lg flex items-center justify-center border-2 border-red-200 hover:bg-red-50">
+          <X className="w-8 h-8 text-red-500" strokeWidth={2.5} />
+        </button>
+        <button className="w-20 h-20 bg-gradient-to-br from-pink-500 to-purple-600 rounded-full shadow-xl flex items-center justify-center">
+          <Heart className="w-10 h-10 text-white" strokeWidth={2.5} />
+        </button>
+      </div>
+
+      {/* Swipe hint (shows on first load) */}
+      <div className="absolute bottom-32 left-1/2 transform -translate-x-1/2 bg-black bg-opacity-75 text-white px-4 py-2 rounded-full text-sm">
+        ← Swipe to choose →
+      </div>
+    </div>
+  );
+
+  const ResultsScreen = () => (
+    <div className="h-full flex flex-col bg-gradient-to-b from-purple-50 to-pink-50">
+      {/* Header */}
+      <div className="pt-8 pb-4 px-6">
+        <button className="mb-2">
+          <ChevronLeft className="w-6 h-6 text-gray-600" />
+        </button>
+        <h1 className="text-2xl font-bold text-center text-gray-800">Your Favorite Cats! 🎉</h1>
+        <p className="text-center text-gray-600 mt-2">You liked <span className="font-bold text-purple-600">8 out of 15</span> kitties</p>
+      </div>
+
+      {/* Gallery Grid */}
+      <div className="flex-1 px-4 overflow-y-auto">
+        <div className="grid grid-cols-2 gap-3 pb-4">
+          {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
+            <div key={i} className="aspect-square bg-white rounded-2xl shadow-md overflow-hidden border border-gray-200">
+              <div className="h-full bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center">
+                <div className="w-12 h-12 bg-gray-400 rounded-full"></div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Action button */}
+      <div className="px-6 py-6">
+        <button className="w-full bg-gradient-to-r from-pink-500 to-purple-600 text-white py-4 rounded-2xl font-semibold shadow-lg flex items-center justify-center gap-2">
+          <RotateCcw className="w-5 h-5" />
+          Try Again
+        </button>
+      </div>
+    </div>
+  );
+
+  return (
+    <div className="min-h-screen bg-gray-100 p-8">
+      <div className="max-w-6xl mx-auto">
+        <div className="text-center mb-8">
+          <h1 className="text-3xl font-bold text-gray-800 mb-2">Paws & Preferences - UI Wireframes</h1>
+          <p className="text-gray-600">Mobile-first design for cat preference discovery</p>
+          
+          {/* Screen selector */}
+          <div className="flex gap-3 justify-center mt-6">
+            <button
+              onClick={() => setActiveScreen('swipe')}
+              className={`px-6 py-2 rounded-lg font-medium transition-colors ${
+                activeScreen === 'swipe'
+                  ? 'bg-purple-600 text-white'
+                  : 'bg-white text-gray-600 hover:bg-gray-50'
+              }`}
+            >
+              Swipe Screen
+            </button>
+            <button
+              onClick={() => setActiveScreen('results')}
+              className={`px-6 py-2 rounded-lg font-medium transition-colors ${
+                activeScreen === 'results'
+                  ? 'bg-purple-600 text-white'
+                  : 'bg-white text-gray-600 hover:bg-gray-50'
+              }`}
+            >
+              Results Screen
+            </button>
+          </div>
+        </div>
+
+        <div className="flex justify-center">
+          <MobileFrame title={activeScreen === 'swipe' ? 'Main Swiping Interface' : 'Liked Cats Gallery'}>
+            {activeScreen === 'swipe' ? <SwipeScreen /> : <ResultsScreen />}
+          </MobileFrame>
+        </div>
+
+        {/* Design Notes */}
+        <div className="mt-8 bg-white rounded-xl shadow-md p-6">
+          <h2 className="text-xl font-bold text-gray-800 mb-4">Design Notes & Features</h2>
+          
+          <div className="grid md:grid-cols-2 gap-6">
+            <div>
+              <h3 className="font-semibold text-purple-600 mb-2">Swipe Interface</h3>
+              <ul className="text-sm text-gray-600 space-y-1">
+                <li>• Card stack visualization (depth perception)</li>
+                <li>• Progress bar shows how many cats left</li>
+                <li>• Visual feedback overlays (❤️ green, ✕ red)</li>
+                <li>• Large touch targets for buttons</li>
+                <li>• First-time hint for swipe gestures</li>
+                <li>• Smooth card animations on swipe</li>
+              </ul>
+            </div>
+            
+            <div>
+              <h3 className="font-semibold text-purple-600 mb-2">Results Screen</h3>
+              <ul className="text-sm text-gray-600 space-y-1">
+                <li>• Summary stat at top (X of Y liked)</li>
+                <li>• 2-column grid for easy viewing</li>
+                <li>• Tap to view full-size (optional)</li>
+                <li>• "Try Again" resets the experience</li>
+                <li>• Share favorite cats (future feature)</li>
+              </ul>
+            </div>
+            
+            <div>
+              <h3 className="font-semibold text-purple-600 mb-2">Interactions</h3>
+              <ul className="text-sm text-gray-600 space-y-1">
+                <li>• Swipe left/right with touch gestures</li>
+                <li>• Tap buttons as alternative to swipe</li>
+                <li>• Haptic feedback on selection (mobile)</li>
+                <li>• Spring animations for card movement</li>
+              </ul>
+            </div>
+            
+            <div>
+              <h3 className="font-semibold text-purple-600 mb-2">Technical Considerations</h3>
+              <ul className="text-sm text-gray-600 space-y-1">
+                <li>• Preload next 2-3 images</li>
+                <li>• Handle slow network gracefully</li>
+                <li>• Touch event optimization</li>
+                <li>• Responsive down to 320px width</li>
+                <li>• PWA capabilities for install</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Wireframes;
