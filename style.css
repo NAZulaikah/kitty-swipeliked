@@ -1,14 +1,14 @@
 :root{
-  --bg1: #fff7fd;
-  --accent1: #a855f7;
-  --accent2: #fb7185;
+  --bg1: #fff0f7;
+  --accent1: #d946ef; /* purple */
+  --accent2: #ec4899; /* pink */
   --muted: #6b7280;
   --card-radius: 22px;
 }
 
 *{box-sizing:border-box}
 html,body{height:100%;margin:0;font-family:Inter,ui-sans-serif,system-ui,Arial;background:linear-gradient(180deg,var(--bg1),#fff);color:#111}
-.topbar{width:100%;padding:18px 12px;background:linear-gradient(90deg,#fda4af,#e879f9);color:#fff;position:sticky;top:0;z-index:40;border-bottom-left-radius:18px;border-bottom-right-radius:18px}
+.topbar{width:100%;padding:18px 12px;background:linear-gradient(90deg,var(--accent2),var(--accent1));color:#fff;position:sticky;top:0;z-index:40;border-bottom-left-radius:18px;border-bottom-right-radius:18px}
 .topbar .brand{font-weight:700;text-align:center;font-size:18px}
 
 /* layout */
@@ -18,12 +18,13 @@ html,body{height:100%;margin:0;font-family:Inter,ui-sans-serif,system-ui,Arial;b
 .landing .title{margin:8px 0 12px;font-size:18px;text-align:center;color:#2e1b2e}
 .controls-top{display:flex;gap:10px;justify-content:center;margin-bottom:10px}
 .btn{padding:10px 14px;border-radius:14px;border:none;cursor:pointer;font-weight:600}
-.btn.primary{background:linear-gradient(90deg,var(--accent2),#ffb4eb);color:#fff;box-shadow:0 6px 20px rgba(184,63,118,0.12)}
+.btn.primary{background:linear-gradient(90deg,var(--accent2),var(--accent1));color:#fff;box-shadow:0 6px 20px rgba(184,63,118,0.12)}
 .btn.ghost{background:#fff;border:1px solid #eee;color:var(--muted)}
 .btn.link{background:transparent;color:var(--accent2);border:none}
 
 /* liked list horizontal */
 .liked-section{margin-top:14px}
+.liked-count{text-align:center;font-size:16px;font-weight:600;color:var(--accent2);margin-bottom:6px}
 .liked-list{display:flex;gap:12px;padding:8px 2px;overflow-x:auto}
 .liked-list img{width:110px;height:110px;object-fit:cover;border-radius:12px;box-shadow:0 8px 24px rgba(16,24,40,0.06)}
 
@@ -51,14 +52,14 @@ html,body{height:100%;margin:0;font-family:Inter,ui-sans-serif,system-ui,Arial;b
 
 /* overlays */
 .overlay{position:absolute;top:20px;padding:10px 18px;border-radius:12px;font-size:22px;font-weight:700;opacity:0;transition:opacity 120ms}
-.overlay-like{right:18px;background:rgba(16,185,129,0.12);color:#10b981;border:2px solid rgba(16,185,129,0.18)}
+.overlay-like{right:18px;background:rgba(236,72,153,0.12);color:#ec4899;border:2px solid rgba(236,72,153,0.18)}
 .overlay-dislike{left:18px;background:rgba(239,68,68,0.08);color:#ef4444;border:2px solid rgba(239,68,68,0.12)}
 
 /* actions */
 .actions{display:flex;gap:18px;align-items:center;justify-content:center;margin-top:8px}
 .round{width:66px;height:66px;border-radius:50%;font-size:22px;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 10px 30px rgba(16,24,40,0.08)}
 .btn-red{background:#ffe9ea;color:#ef4444}
-.btn-green{background:linear-gradient(90deg,#34d399,#60a5fa);color:#fff}
+.btn-green{background:linear-gradient(90deg,var(--accent1),var(--accent2));color:#fff;}
 .btn-undo{background:#fff2d7;color:#b45309}
 
 /* slide animations */
