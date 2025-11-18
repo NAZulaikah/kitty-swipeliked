@@ -1,0 +1,64 @@
+:root{
+  --bg1: #fff7fd;
+  --accent1: #a855f7; /* purple */
+  --accent2: #fb7185; /* pink */
+  --muted: #6b7280;
+  --card-radius: 22px;
+}
+
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;font-family:Inter,ui-sans-serif,system-ui,Arial;background:linear-gradient(180deg,var(--bg1),#fff);color:#111}
+.topbar{width:100%;padding:18px 12px;background:linear-gradient(90deg,#fda4af,#e879f9);color:#fff;position:sticky;top:0;z-index:40;border-bottom-left-radius:18px;border-bottom-right-radius:18px}
+.topbar .brand{font-weight:700;text-align:center;font-size:18px}
+
+/* layout */
+.container{max-width:420px;margin:18px auto;padding:12px;width:100%}
+
+/* landing */
+.landing .title{margin:8px 0 12px;font-size:18px;text-align:center;color:#2e1b2e}
+.controls-top{display:flex;gap:10px;justify-content:center;margin-bottom:10px}
+.btn{padding:10px 14px;border-radius:14px;border:none;cursor:pointer;font-weight:600}
+.btn.primary{background:linear-gradient(90deg,var(--accent2),#ffb4eb);color:#fff;box-shadow:0 6px 20px rgba(184,63,118,0.12)}
+.btn.ghost{background:#fff;border:1px solid #eee;color:var(--muted)}
+.btn.link{background:transparent;color:var(--accent2);border:none}
+
+/* liked list horizontal */
+.liked-section{margin-top:14px}
+.liked-list{display:flex;gap:12px;padding:8px 2px;overflow-x:auto}
+.liked-list img{width:110px;height:110px;object-fit:cover;border-radius:12px;box-shadow:0 8px 24px rgba(16,24,40,0.06)}
+
+/* swipe area */
+.swipe-area{display:flex;flex-direction:column;align-items:center;gap:12px}
+.progress-wrap{width:100%;padding:0 16px}
+.progress-text{font-size:14px;color:var(--muted);text-align:center;margin-bottom:8px}
+.progress-bar{height:8px;background:#f1f1f1;border-radius:999px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--accent1),var(--accent2));width:0%}
+
+/* card stage */
+.card-stage{width:100%;display:flex;align-items:center;justify-content:center;padding:14px 0;position:relative}
+.card{width:320px;height:420px;border-radius:var(--card-radius);background:#fff;box-shadow:0 18px 50px rgba(20,10,30,0.08);overflow:hidden;position:relative;display:flex;align-items:center;justify-content:center;touch-action:none;user-select:none}
+.card img{width:100%;height:100%;object-fit:cover;display:block}
+.back-card{position:absolute;inset:auto;width:88%;height:86%;transform:translateY(10px) scale(0.96);opacity:0.6;border-radius:20px;border:3px dashed #eee;z-index:1}
+
+/* overlay indicators */
+.overlay{position:absolute;top:20px;padding:10px 18px;border-radius:12px;font-size:22px;font-weight:700;opacity:0;transition:opacity 120ms}
+.overlay-like{right:18px;background:rgba(16,185,129,0.12);color:#10b981;border:2px solid rgba(16,185,129,0.18)}
+.overlay-dislike{left:18px;background:rgba(239,68,68,0.08);color:#ef4444;border:2px solid rgba(239,68,68,0.12)}
+
+/* actions */
+.actions{display:flex;gap:18px;align-items:center;justify-content:center;margin-top:8px}
+.round{width:66px;height:66px;border-radius:50%;font-size:22px;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 10px 30px rgba(16,24,40,0.08)}
+.btn-red{background:#ffe9ea;color:#ef4444}
+.btn-green{background:linear-gradient(90deg,#34d399,#60a5fa);color:#fff}
+.btn-undo{background:#fff2d7;color:#b45309}
+
+/* slide animations (add classes for slide) */
+.slide-left{transform: translateX(-1000px) rotate(-30deg);opacity:0;transition:transform 420ms cubic-bezier(.22,.9,.32,1),opacity 420ms}
+.slide-right{transform: translateX(1000px) rotate(30deg);opacity:0;transition:transform 420ms cubic-bezier(.22,.9,.32,1),opacity 420ms}
+
+/* small foot */
+.footer-note{margin-top:10px}
+.hidden{display:none}
+
+/* responsive tweaks */
+@media (max-width:360px){ .card{width:300px;height:360px} .liked-list img{width:90px;height:90px} }
