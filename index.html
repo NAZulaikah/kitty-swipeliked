@@ -1,54 +1,47 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Paws & Preferences</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header class="topbar">
-    <div class="brand">🐾 Paws & Preferences</div>
+  <header>
+    <h1>🐾 Paws & Preferences</h1>
   </header>
 
   <main class="container">
-    <!-- Landing page -->
-    <section id="landing" class="landing">
-      <h2 class="title">Discover which cats you love!</h2>
+    <!-- Liked images + count -->
+    <div class="liked-header">
+      <div id="likedCount">❤️ 0 cats</div>
+      <button id="clearBtn" class="btn ghost">Clear Likes</button>
+    </div>
+    <div id="likedList" class="liked-list"></div>
 
-      <div id="likedCount" class="liked-count"></div>
-      <div id="likedList" class="liked-list"></div>
-
-      <div class="controls-top">
-        <button id="startBtn" class="btn primary">Start Swiping</button>
-        <button id="clearBtn" class="btn ghost">Clear Likes</button>
+    <!-- Swipe card -->
+    <div class="card-container">
+      <div id="card" class="card">
+        <img id="cardImage" src="" alt="cat" draggable="false">
+        <div class="overlay overlay-like">❤️</div>
+        <div class="overlay overlay-dislike">✖️</div>
       </div>
-    </section>
+    </div>
 
-    <!-- Swipe floating -->
-    <section id="swipeArea" class="swipe-area hidden">
-      <div class="progress-wrap">
-        <div id="progressText" class="progress-text">Cat 1 of 15</div>
-        <div class="progress-bar">
-          <div id="progressFill" class="progress-fill" style="width:0%"></div>
-        </div>
-      </div>
+    <!-- Action buttons -->
+    <div class="actions">
+      <button id="dislikeBtn" class="round btn-red">✖</button>
+      <button id="undoBtn" class="round btn-undo">↺</button>
+      <button id="likeBtn" class="round btn-green">❤</button>
+    </div>
 
-      <div class="card-stage">
-        <div class="card back-card"></div>
-        <div id="card" class="card front-card">
-          <img id="cardImage" src="" alt="cat" draggable="false" />
-          <div class="overlay overlay-like">❤️</div>
-          <div class="overlay overlay-dislike">✖️</div>
-        </div>
+    <!-- Progress -->
+    <div class="progress-wrap">
+      <div id="progressText">Cat 1 of 15</div>
+      <div class="progress-bar">
+        <div id="progressFill" class="progress-fill" style="width:0%"></div>
       </div>
-
-      <div class="actions">
-        <button id="dislikeBtn" class="round btn-red">✖</button>
-        <button id="undoBtn" class="round btn-undo">↺</button>
-        <button id="likeBtn" class="round btn-green">❤</button>
-      </div>
-    </section>
+    </div>
   </main>
 
   <script src="script.js"></script>
