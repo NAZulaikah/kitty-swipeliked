@@ -46,9 +46,13 @@ function showLiked(){
 function renderCard(){
   if(index>=images.length){ index=0; generateImages(); }
   const url = images[index];
+  cardImage.style.opacity = 0;
   cardImage.src = url;
+  cardImage.onload = () => { cardImage.style.opacity = 1; }
+
   const nextUrl = images[index+1]||images[0];
   backCard.style.background = `url(${nextUrl}) center/cover no-repeat`;
+  backCard.style.backgroundSize = 'cover';
   preloadAt(index+1);
   updateProgress();
 }
