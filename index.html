@@ -12,7 +12,7 @@
   </header>
 
   <main class="container">
-    <!-- Landing / Results area (top) -->
+    <!-- Landing / Results area -->
     <section id="landing" class="landing">
       <h2 class="title">Discover which cats you love!</h2>
       <div class="controls-top">
@@ -36,13 +36,12 @@
       </div>
 
       <div class="card-stage">
-        <!-- back shadow placeholder for depth -->
+        <!-- Back card -->
         <div class="card back-card"></div>
 
-        <!-- front card -->
+        <!-- Front card -->
         <div id="card" class="card front-card">
           <img id="cardImage" src="" alt="cat" draggable="false" />
-          <!-- overlays for Like/Dislike -->
           <div class="overlay overlay-like">❤️</div>
           <div class="overlay overlay-dislike">✖️</div>
         </div>
@@ -53,14 +52,14 @@
         <button id="undoBtn" class="round btn-undo" aria-label="Undo">↺</button>
         <button id="likeBtn" class="round btn-green" aria-label="Like">❤</button>
       </div>
-      
+
       <div class="footer-note">
         <button id="doneBtn" class="btn link">Show Liked (results)</button>
       </div>
     </section>
   </main>
 
-  <!-- audio -->
+  <!-- Audio -->
   <audio id="likeSound" src="assets/like.mp3" preload="auto"></audio>
   <audio id="dislikeSound" src="assets/dislike.mp3" preload="auto"></audio>
 

@@ -1,7 +1,7 @@
 :root{
   --bg1: #fff7fd;
-  --accent1: #a855f7; /* purple */
-  --accent2: #fb7185; /* pink */
+  --accent1: #a855f7;
+  --accent2: #fb7185;
   --muted: #6b7280;
   --card-radius: 22px;
 }
@@ -36,11 +36,20 @@ html,body{height:100%;margin:0;font-family:Inter,ui-sans-serif,system-ui,Arial;b
 
 /* card stage */
 .card-stage{width:100%;display:flex;align-items:center;justify-content:center;padding:14px 0;position:relative}
-.card{width:320px;height:420px;border-radius:var(--card-radius);background:#fff;box-shadow:0 18px 50px rgba(20,10,30,0.08);overflow:hidden;position:relative;display:flex;align-items:center;justify-content:center;touch-action:none;user-select:none}
-.card img{width:100%;height:100%;object-fit:cover;display:block}
-.back-card{position:absolute;inset:auto;width:88%;height:86%;transform:translateY(10px) scale(0.96);opacity:0.6;border-radius:20px;border:3px dashed #eee;z-index:1}
+.back-card{position:absolute;inset:auto;width:88%;height:86%;transform:translateY(10px) scale(0.96);opacity:0.6;border-radius:20px;border:3px dashed #eee;z-index:1;background-size:cover;background-position:center}
+.front-card{z-index:2;position:relative;}
 
-/* overlay indicators */
+/* card image */
+.front-card img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  border-radius:var(--card-radius);
+  pointer-events:none;
+  user-select:none;
+}
+
+/* overlays */
 .overlay{position:absolute;top:20px;padding:10px 18px;border-radius:12px;font-size:22px;font-weight:700;opacity:0;transition:opacity 120ms}
 .overlay-like{right:18px;background:rgba(16,185,129,0.12);color:#10b981;border:2px solid rgba(16,185,129,0.18)}
 .overlay-dislike{left:18px;background:rgba(239,68,68,0.08);color:#ef4444;border:2px solid rgba(239,68,68,0.12)}
@@ -52,11 +61,11 @@ html,body{height:100%;margin:0;font-family:Inter,ui-sans-serif,system-ui,Arial;b
 .btn-green{background:linear-gradient(90deg,#34d399,#60a5fa);color:#fff}
 .btn-undo{background:#fff2d7;color:#b45309}
 
-/* slide animations (add classes for slide) */
+/* slide animations */
 .slide-left{transform: translateX(-1000px) rotate(-30deg);opacity:0;transition:transform 420ms cubic-bezier(.22,.9,.32,1),opacity 420ms}
 .slide-right{transform: translateX(1000px) rotate(30deg);opacity:0;transition:transform 420ms cubic-bezier(.22,.9,.32,1),opacity 420ms}
 
-/* small foot */
+/* footer note */
 .footer-note{margin-top:10px}
 .hidden{display:none}
 
