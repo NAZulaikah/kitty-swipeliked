@@ -12,22 +12,20 @@
   </header>
 
   <main class="container">
-    <!-- Landing / Results area -->
+    <!-- Landing page -->
     <section id="landing" class="landing">
       <h2 class="title">Discover which cats you love!</h2>
+
       <div id="likedCount" class="liked-count"></div>
+      <div id="likedList" class="liked-list"></div>
+
       <div class="controls-top">
         <button id="startBtn" class="btn primary">Start Swiping</button>
         <button id="clearBtn" class="btn ghost">Clear Likes</button>
       </div>
-
-      <div id="likedSection" class="liked-section hidden">
-        <h3 class="small">Your liked cats</h3>
-        <div id="likedList" class="liked-list"></div>
-      </div>
     </section>
 
-    <!-- Swipe area -->
+    <!-- Swipe floating -->
     <section id="swipeArea" class="swipe-area hidden">
       <div class="progress-wrap">
         <div id="progressText" class="progress-text">Cat 1 of 15</div>
@@ -37,10 +35,7 @@
       </div>
 
       <div class="card-stage">
-        <!-- Back card -->
         <div class="card back-card"></div>
-
-        <!-- Front card -->
         <div id="card" class="card front-card">
           <img id="cardImage" src="" alt="cat" draggable="false" />
           <div class="overlay overlay-like">❤️</div>
@@ -49,20 +44,12 @@
       </div>
 
       <div class="actions">
-        <button id="dislikeBtn" class="round btn-red" aria-label="Dislike">✖</button>
-        <button id="undoBtn" class="round btn-undo" aria-label="Undo">↺</button>
-        <button id="likeBtn" class="round btn-green" aria-label="Like">❤</button>
-      </div>
-
-      <div class="footer-note">
-        <button id="doneBtn" class="btn link">Show Liked (results)</button>
+        <button id="dislikeBtn" class="round btn-red">✖</button>
+        <button id="undoBtn" class="round btn-undo">↺</button>
+        <button id="likeBtn" class="round btn-green">❤</button>
       </div>
     </section>
   </main>
-
-  <!-- Audio -->
-  <audio id="likeSound" src="assets/like.mp3" preload="auto"></audio>
-  <audio id="dislikeSound" src="assets/dislike.mp3" preload="auto"></audio>
 
   <script src="script.js"></script>
 </body>
