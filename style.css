@@ -1,53 +1,37 @@
 body {
   font-family: 'Segoe UI', sans-serif;
-  margin: 0;
-  padding: 0;
-  background: linear-gradient(180deg, #ffe0f0 0%, #f9d0ff 100%);
-  color: #333;
+  margin:0;
+  padding:0;
+  background: linear-gradient(180deg, #ffe0f0, #f9d0ff);
+  color:#333;
 }
 
-.topbar {
-  text-align: center;
-  padding: 1rem;
-  background: #ffb6c1;
-  font-weight: bold;
-  color: white;
-}
+header { text-align:center; padding:1rem; background:#ff7eb9; color:white; font-weight:bold; font-size:1.5rem; }
 
-.container { padding: 1rem; max-width: 500px; margin: auto; }
+.container { max-width:500px; margin:auto; padding:1rem; }
 
-.landing .title { text-align: center; margin-bottom: 1rem; font-size: 1.5rem; }
+.liked-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem; }
+.liked-count-badge, #likedCount { font-weight:bold; font-size:0.9rem; background: linear-gradient(90deg,#ff7eb9,#a25bff); color:white; padding:0.4rem 0.8rem; border-radius:20px; }
+.btn { padding:0.4rem 0.8rem; border:none; border-radius:10px; cursor:pointer; font-weight:bold; }
+.btn.ghost { background:#fff; color:#a25bff; border:2px solid #a25bff; }
 
-.liked-count { text-align:center; margin-bottom:0.5rem; font-weight:bold; }
-.liked-list { display:flex; flex-wrap:wrap; gap:0.5rem; justify-content:center; }
+.liked-list { display:flex; flex-wrap:wrap; gap:0.5rem; margin-bottom:1rem; }
 .liked-list img { width:80px; height:80px; border-radius:12px; object-fit:cover; }
 
-.controls-top { display:flex; justify-content:center; gap:1rem; margin-top:1rem; }
-.btn { padding:0.5rem 1rem; border:none; border-radius:10px; cursor:pointer; font-weight:bold; }
-.btn.primary { background: linear-gradient(90deg, #ff7eb9, #a25bff); color:white; }
-.btn.ghost { background: #fff; color:#a25bff; border:2px solid #a25bff; }
-
-.swipe-area { position:fixed; bottom:20px; left:50%; transform:translateX(-50%); width:90%; max-width:400px; z-index:10; }
-.hidden { display:none; }
-
-.progress-wrap { margin-bottom:1rem; }
-.progress-text { text-align:center; margin-bottom:0.3rem; font-size:0.9rem; }
-.progress-bar { height:6px; background:#eee; border-radius:3px; overflow:hidden; }
-.progress-fill { height:100%; background:linear-gradient(90deg,#ff7eb9,#a25bff); width:0%; }
-
-.card-stage { position:relative; height:300px; }
-.card { position:absolute; width:100%; height:100%; border-radius:20px; overflow:hidden; box-shadow:0 4px 15px rgba(0,0,0,0.2); background:#fff; display:flex; align-items:center; justify-content:center; }
-.back-card { transform:scale(0.95); opacity:0.4; z-index:1; }
-.front-card { z-index:2; touch-action:none; }
-
-.front-card img { width:100%; height:100%; object-fit:cover; border-radius:20px; }
+.card-container { position:relative; height:300px; margin-bottom:1rem; }
+.card { position:absolute; width:100%; height:100%; border-radius:20px; overflow:hidden; box-shadow:0 4px 15px rgba(0,0,0,0.2); background:#fff; display:flex; align-items:center; justify-content:center; touch-action:none; transition:transform 0.3s ease; }
+.card img { width:100%; height:100%; object-fit:cover; border-radius:20px; }
 
 .overlay { position:absolute; top:10px; font-size:2rem; font-weight:bold; padding:0.5rem; border-radius:10px; opacity:0; transition:0.2s; }
 .overlay-like { right:10px; color:#4ade80; }
 .overlay-dislike { left:10px; color:#f87171; }
 
-.actions { display:flex; justify-content:center; gap:1rem; margin-top:1rem; }
+.actions { display:flex; justify-content:center; gap:1rem; margin-bottom:1rem; }
 .round { width:50px; height:50px; border-radius:50%; border:none; font-size:1.2rem; color:white; cursor:pointer; }
 .btn-red { background:#f87171; }
 .btn-green { background:#4ade80; }
 .btn-undo { background:#ffcc00; }
+
+.progress-wrap { text-align:center; }
+.progress-bar { height:6px; background:#eee; border-radius:3px; overflow:hidden; margin-top:0.3rem; }
+.progress-fill { height:100%; background:linear-gradient(90deg,#ff7eb9,#a25bff); width:0%; }
