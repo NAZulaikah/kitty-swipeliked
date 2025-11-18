@@ -1,74 +1,53 @@
-:root{
-  --bg1: #fff0f7;
-  --accent1: #d946ef; /* purple */
-  --accent2: #ec4899; /* pink */
-  --muted: #6b7280;
-  --card-radius: 22px;
+body {
+  font-family: 'Segoe UI', sans-serif;
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(180deg, #ffe0f0 0%, #f9d0ff 100%);
+  color: #333;
 }
 
-*{box-sizing:border-box}
-html,body{height:100%;margin:0;font-family:Inter,ui-sans-serif,system-ui,Arial;background:linear-gradient(180deg,var(--bg1),#fff);color:#111}
-.topbar{width:100%;padding:18px 12px;background:linear-gradient(90deg,var(--accent2),var(--accent1));color:#fff;position:sticky;top:0;z-index:40;border-bottom-left-radius:18px;border-bottom-right-radius:18px}
-.topbar .brand{font-weight:700;text-align:center;font-size:18px}
-
-/* layout */
-.container{max-width:420px;margin:18px auto;padding:12px;width:100%}
-
-/* landing */
-.landing .title{margin:8px 0 12px;font-size:18px;text-align:center;color:#2e1b2e}
-.controls-top{display:flex;gap:10px;justify-content:center;margin-bottom:10px}
-.btn{padding:10px 14px;border-radius:14px;border:none;cursor:pointer;font-weight:600}
-.btn.primary{background:linear-gradient(90deg,var(--accent2),var(--accent1));color:#fff;box-shadow:0 6px 20px rgba(184,63,118,0.12)}
-.btn.ghost{background:#fff;border:1px solid #eee;color:var(--muted)}
-.btn.link{background:transparent;color:var(--accent2);border:none}
-
-/* liked list horizontal */
-.liked-section{margin-top:14px}
-.liked-count{text-align:center;font-size:16px;font-weight:600;color:var(--accent2);margin-bottom:6px}
-.liked-list{display:flex;gap:12px;padding:8px 2px;overflow-x:auto}
-.liked-list img{width:110px;height:110px;object-fit:cover;border-radius:12px;box-shadow:0 8px 24px rgba(16,24,40,0.06)}
-
-/* swipe area */
-.swipe-area{display:flex;flex-direction:column;align-items:center;gap:12px}
-.progress-wrap{width:100%;padding:0 16px}
-.progress-text{font-size:14px;color:var(--muted);text-align:center;margin-bottom:8px}
-.progress-bar{height:8px;background:#f1f1f1;border-radius:999px;overflow:hidden}
-.progress-fill{height:100%;background:linear-gradient(90deg,var(--accent1),var(--accent2));width:0%}
-
-/* card stage */
-.card-stage{width:100%;display:flex;align-items:center;justify-content:center;padding:14px 0;position:relative}
-.back-card{position:absolute;inset:auto;width:88%;height:86%;transform:translateY(10px) scale(0.96);opacity:0.6;border-radius:20px;border:3px dashed #eee;z-index:1;background-size:cover;background-position:center}
-.front-card{z-index:2;position:relative;}
-
-/* card image */
-.front-card img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  border-radius:var(--card-radius);
-  pointer-events:none;
-  user-select:none;
+.topbar {
+  text-align: center;
+  padding: 1rem;
+  background: #ffb6c1;
+  font-weight: bold;
+  color: white;
 }
 
-/* overlays */
-.overlay{position:absolute;top:20px;padding:10px 18px;border-radius:12px;font-size:22px;font-weight:700;opacity:0;transition:opacity 120ms}
-.overlay-like{right:18px;background:rgba(236,72,153,0.12);color:#ec4899;border:2px solid rgba(236,72,153,0.18)}
-.overlay-dislike{left:18px;background:rgba(239,68,68,0.08);color:#ef4444;border:2px solid rgba(239,68,68,0.12)}
+.container { padding: 1rem; max-width: 500px; margin: auto; }
 
-/* actions */
-.actions{display:flex;gap:18px;align-items:center;justify-content:center;margin-top:8px}
-.round{width:66px;height:66px;border-radius:50%;font-size:22px;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 10px 30px rgba(16,24,40,0.08)}
-.btn-red{background:#ffe9ea;color:#ef4444}
-.btn-green{background:linear-gradient(90deg,var(--accent1),var(--accent2));color:#fff;}
-.btn-undo{background:#fff2d7;color:#b45309}
+.landing .title { text-align: center; margin-bottom: 1rem; font-size: 1.5rem; }
 
-/* slide animations */
-.slide-left{transform: translateX(-1000px) rotate(-30deg);opacity:0;transition:transform 420ms cubic-bezier(.22,.9,.32,1),opacity 420ms}
-.slide-right{transform: translateX(1000px) rotate(30deg);opacity:0;transition:transform 420ms cubic-bezier(.22,.9,.32,1),opacity 420ms}
+.liked-count { text-align:center; margin-bottom:0.5rem; font-weight:bold; }
+.liked-list { display:flex; flex-wrap:wrap; gap:0.5rem; justify-content:center; }
+.liked-list img { width:80px; height:80px; border-radius:12px; object-fit:cover; }
 
-/* footer note */
-.footer-note{margin-top:10px}
-.hidden{display:none}
+.controls-top { display:flex; justify-content:center; gap:1rem; margin-top:1rem; }
+.btn { padding:0.5rem 1rem; border:none; border-radius:10px; cursor:pointer; font-weight:bold; }
+.btn.primary { background: linear-gradient(90deg, #ff7eb9, #a25bff); color:white; }
+.btn.ghost { background: #fff; color:#a25bff; border:2px solid #a25bff; }
 
-/* responsive tweaks */
-@media (max-width:360px){ .card{width:300px;height:360px} .liked-list img{width:90px;height:90px} }
+.swipe-area { position:fixed; bottom:20px; left:50%; transform:translateX(-50%); width:90%; max-width:400px; z-index:10; }
+.hidden { display:none; }
+
+.progress-wrap { margin-bottom:1rem; }
+.progress-text { text-align:center; margin-bottom:0.3rem; font-size:0.9rem; }
+.progress-bar { height:6px; background:#eee; border-radius:3px; overflow:hidden; }
+.progress-fill { height:100%; background:linear-gradient(90deg,#ff7eb9,#a25bff); width:0%; }
+
+.card-stage { position:relative; height:300px; }
+.card { position:absolute; width:100%; height:100%; border-radius:20px; overflow:hidden; box-shadow:0 4px 15px rgba(0,0,0,0.2); background:#fff; display:flex; align-items:center; justify-content:center; }
+.back-card { transform:scale(0.95); opacity:0.4; z-index:1; }
+.front-card { z-index:2; touch-action:none; }
+
+.front-card img { width:100%; height:100%; object-fit:cover; border-radius:20px; }
+
+.overlay { position:absolute; top:10px; font-size:2rem; font-weight:bold; padding:0.5rem; border-radius:10px; opacity:0; transition:0.2s; }
+.overlay-like { right:10px; color:#4ade80; }
+.overlay-dislike { left:10px; color:#f87171; }
+
+.actions { display:flex; justify-content:center; gap:1rem; margin-top:1rem; }
+.round { width:50px; height:50px; border-radius:50%; border:none; font-size:1.2rem; color:white; cursor:pointer; }
+.btn-red { background:#f87171; }
+.btn-green { background:#4ade80; }
+.btn-undo { background:#ffcc00; }
