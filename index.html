@@ -1,66 +1,74 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Paws & Preferences</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-<header>
-  <h1>🐾 Paws & Preferences</h1>
+<header class="topbar">
+  <div class="brand">🐾 Paws & Preferences</div>
 </header>
 
 <main class="container">
 
-  <!-- Open Popup Button -->
-  <div class="start-wrap">
-    <button id="openSwipe" class="btn start-btn">Start Swiping</button>
-  </div>
+  <!-- Landing Page -->
+  <section id="landing" class="landing">
+    <h2 class="title">Discover which cats you love!</h2>
 
-  <!-- Liked Images -->
-  <div class="liked-header">
-    <div id="likedCount">❤️ 0 cats</div>
-    <button id="clearBtn" class="btn ghost">Clear Likes</button>
-  </div>
+    <div class="controls-top">
+      <button id="startBtn" class="btn primary">Start Swiping</button>
+      <button id="clearBtn" class="btn ghost">Clear Likes</button>
+    </div>
 
-  <div id="likedList" class="liked-list"></div>
+    <!-- Liked Gallery -->
+    <div id="likedSection" class="liked-section hidden">
+      <h3>Your liked cats (<span id="likeCount">0</span>)</h3>
+      <div id="likedGallery" class="gallery"></div>
+    </div>
+  </section>
 
-</main>
-
-<!-- POPUP SWIPE WINDOW -->
-<div id="swipePopup" class="popup-overlay">
-  <div class="popup-window">
+  <!-- Swipe Popup -->
+  <section id="popup" class="popup hidden">
 
     <button id="closePopup" class="close-btn">✖</button>
 
-    <!-- Swipe card -->
-    <div class="card-container">
-      <div id="card" class="card">
-        <img id="cardImage" src="" alt="cat" draggable="false">
+    <div class="progress-wrap">
+      <div id="progressText" class="progress-text">Cat 1 of 15</div>
+      <div class="progress-bar">
+        <div id="progressFill" class="progress-fill"></div>
+      </div>
+    </div>
+
+    <div class="card-stage">
+      <div class="card back-card"></div>
+
+      <div id="card" class="card front-card">
+        <img id="cardImage" src="" draggable="false" />
         <div class="overlay overlay-like">❤️</div>
         <div class="overlay overlay-dislike">✖️</div>
       </div>
     </div>
 
-    <!-- Action buttons -->
     <div class="actions">
       <button id="dislikeBtn" class="round btn-red">✖</button>
       <button id="undoBtn" class="round btn-undo">↺</button>
       <button id="likeBtn" class="round btn-green">❤</button>
     </div>
 
-    <!-- Progress -->
-    <div class="progress-wrap">
-      <div id="progressText">Cat 1 of 15</div>
-      <div class="progress-bar">
-        <div id="progressFill" class="progress-fill"></div>
-      </div>
-    </div>
+  </section>
 
+  <!-- Fullscreen Slideshow -->
+  <div id="lightbox" class="lightbox hidden">
+    <button class="lightbox-close">✖</button>
+    <button class="lightbox-prev">〈</button>
+    <img id="lightboxImage" />
+    <button class="lightbox-next">〉</button>
   </div>
-</div>
+
+</main>
 
 <script src="script.js"></script>
 </body>
