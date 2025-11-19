@@ -1,195 +1,189 @@
-// CONFIG
-const TOTAL = 15;
-const PRELOAD = 3;
+let liked = JSON.parse(localStorage.getItem("likedCats") || "[]");
+let historyStack = [];
+let total = 15;
+let index = 1;
 
-// ELEMENTS
-const popup = document.getElementById("swipePopup");
-const openSwipe = document.getElementById("openSwipe");
-const closePopup = document.getElementById("closePopup");
-
+const landing = document.getElementById("landing");
+const popup = document.getElementById("popup");
+const likedGallery = document.getElementById("likedGallery");
+const likeCount = document.getElementById("likeCount");
 const card = document.getElementById("card");
 const cardImage = document.getElementById("cardImage");
 
-const likeBtn = document.getElementById("likeBtn");
-const dislikeBtn = document.getElementById("dislikeBtn");
-const undoBtn = document.getElementById("undoBtn");
+updateGallery();
 
-const likedListEl = document.getElementById("likedList");
-const likedCountEl = document.getElementById("likedCount");
-const clearBtn = document.getElementById("clearBtn");
+/*------------------------
+    LOAD RANDOM CAT
+------------------------*/
+function loadCat() {
+  cardImage.src = `https://cataas.com/cat?${Date.now()}`;
+}
 
-const progressText = document.getElementById("progressText");
-const progressFill = document.getElementById("progressFill");
-
-// DATA
-let images = [];
-let index = 0;
-let liked = JSON.parse(localStorage.getItem("likedCats") || "[]");
-let history = [];
-
-// UTIL
-const catURL = () => `https://cataas.com/cat?${Math.random()}`;
-const generateImages = () => images = Array.from({length: TOTAL}, () => catURL());
-
-// ----- POPUP -----
-openSwipe.onclick = () => {
-  popup.style.display = "flex";
-  renderCard();
-};
-closePopup.onclick = () => {
-  popup.style.display = "none";
-  showLiked();
+/*------------------------
+     OPEN POPUP
+------------------------*/
+document.getElementById("startBtn").onclick = () => {
+  landing.classList.add("hidden");
+  popup.classList.remove("hidden");
+  index = 1;
+  updateProgress();
+  loadCat();
 };
 
-// ----- LIKED SECTION -----
-function showLiked() {
-  likedListEl.innerHTML = "";
+/*------------------------
+  CLOSE POPUP
+------------------------*/
+document.getElementById("closePopup").onclick = () => {
+  popup.classList.add("hidden");
+  landing.classList.remove("hidden");
+};
 
-  liked.forEach(url => {
-    const img = document.createElement("img");
-    img.src = url;
-    likedListEl.appendChild(img);
+/*------------------------
+  LIKE / DISLIKE
+------------------------*/
+document.getElementById("likeBtn").onclick = () => {
+  liked.push(cardImage.src);
+  historyStack.push({ img: cardImage.src, action: "like" });
+  nextCat();
+};
+
+document.getElementById("dislikeBtn").onclick = () => {
+  historyStack.push({ img: cardImage.src, action: "dislike" });
+  nextCat();
+};
+
+/* Undo */
+document.getElementById("undoBtn").onclick = () => {
+  const last = historyStack.pop();
+  if (!last) return;
+
+  if (last.action === "like") {
+    liked.pop();
+  }
+  index--;
+  updateProgress();
+  cardImage.src = last.img;
+};
+
+/*------------------------
+      NEXT CAT
+------------------------*/
+function nextCat() {
+  index++;
+  updateProgress();
+
+  if (index > total) {
+    popup.classList.add("hidden");
+    landing.classList.remove("hidden");
+  }
+
+  updateGallery();
+  loadCat();
+}
+
+/*------------------------
+     PROGRESS BAR
+------------------------*/
+function updateProgress() {
+  document.getElementById("progressText").textContent = `Cat ${index} of ${total}`;
+  document.getElementById("progressFill").style.width =
+    ((index - 1) / total) * 100 + "%";
+}
+
+/*------------------------
+     UPDATE GALLERY
+------------------------*/
+function updateGallery() {
+  likedGallery.innerHTML = "";
+  likeCount.textContent = liked.length;
+
+  liked.forEach((img, i) => {
+    const el = document.createElement("img");
+    el.src = img;
+    el.onclick = () => openLightbox(i);
+    likedGallery.appendChild(el);
   });
 
-  likedCountEl.textContent = `❤️ ${liked.length} cats`;
+  localStorage.setItem("likedCats", JSON.stringify(liked));
+
+  document.getElementById("likedSection").classList.toggle(
+    "hidden",
+    liked.length === 0
+  );
 }
 
-clearBtn.onclick = () => {
+/*------------------------
+  CLEAR LIKES
+------------------------*/
+document.getElementById("clearBtn").onclick = () => {
   liked = [];
-  localStorage.setItem("likedCats", JSON.stringify(liked));
-  showLiked();
+  updateGallery();
+  localStorage.removeItem("likedCats");
 };
 
-// ----- CARD RENDER -----
-function updateProgress() {
-  progressText.textContent = `Cat ${index + 1} of ${TOTAL}`;
-  progressFill.style.width = `${(index / TOTAL) * 100}%`;
+/*------------------------
+ FULLSCREEN LIGHTBOX
+------------------------*/
+const lightbox = document.getElementById("lightbox");
+const lightboxImage = document.getElementById("lightboxImage");
+let currentSlide = 0;
+
+function openLightbox(i) {
+  currentSlide = i;
+  lightboxImage.src = liked[i];
+  lightbox.classList.remove("hidden");
 }
 
-function renderCard() {
-  if (index >= images.length) {
-    index = 0;
-    generateImages();
-  }
-  cardImage.src = images[index];
-  updateProgress();
-}
+document.querySelector(".lightbox-close").onclick = () =>
+  lightbox.classList.add("hidden");
 
-// ----- SWIPE LOGIC -----
-let startX = 0;
-let dragging = false;
+document.querySelector(".lightbox-next").onclick = () => {
+  currentSlide = (currentSlide + 1) % liked.length;
+  openLightbox(currentSlide);
+};
 
-function pointerDown(x) {
-  dragging = true;
-  startX = x;
-  card.style.transition = "none";
-}
+document.querySelector(".lightbox-prev").onclick = () => {
+  currentSlide = (currentSlide - 1 + liked.length) % liked.length;
+  openLightbox(currentSlide);
+};
 
-function pointerMove(x) {
-  if (!dragging) return;
-  let dx = x - startX;
+/* Swipe support for slideshow */
+lightbox.addEventListener("touchstart", (e) => (startX = e.touches[0].clientX));
+lightbox.addEventListener("touchend", (e) => {
+  let dx = e.changedTouches[0].clientX - startX;
+  if (dx > 60) document.querySelector(".lightbox-prev").click();
+  if (dx < -60) document.querySelector(".lightbox-next").click();
+});
+
+/*------------------------
+    DRAG SWIPE
+------------------------*/
+let isDragging = false;
+let offset = 0;
+
+card.addEventListener("touchstart", (e) => {
+  isDragging = true;
+  offset = e.touches[0].clientX;
+});
+
+card.addEventListener("touchmove", (e) => {
+  if (!isDragging) return;
+  const dx = e.touches[0].clientX - offset;
 
   card.style.transform = `translateX(${dx}px) rotate(${dx / 20}deg)`;
 
-  if (dx > 0) showOverlay("like");
-  else showOverlay("dislike");
-}
+  document.querySelector(".overlay-like").style.opacity = dx > 60 ? 1 : 0;
+  document.querySelector(".overlay-dislike").style.opacity = dx < -60 ? 1 : 0;
+});
 
-function pointerUp(x) {
-  if (!dragging) return;
-  dragging = false;
+card.addEventListener("touchend", (e) => {
+  isDragging = false;
+  const dx = e.changedTouches[0].clientX - offset;
 
-  let dx = x - startX;
-  card.style.transition = "0.3s";
+  if (dx > 120) document.getElementById("likeBtn").click();
+  else if (dx < -120) document.getElementById("dislikeBtn").click();
 
-  if (dx > 120) doLike();
-  else if (dx < -120) doDislike();
-  else resetCard();
-}
-
-function resetCard() {
-  card.style.transform = "translateX(0) rotate(0)";
-  hideOverlay();
-}
-
-function showOverlay(type) {
-  document.querySelector(".overlay-like").style.opacity = (type === "like") ? 1 : 0;
-  document.querySelector(".overlay-dislike").style.opacity = (type === "dislike") ? 1 : 0;
-}
-function hideOverlay() {
+  card.style.transform = "";
   document.querySelector(".overlay-like").style.opacity = 0;
   document.querySelector(".overlay-dislike").style.opacity = 0;
-}
-
-// ACTIONS
-function doLike() {
-  history.push({idx: index, liked: true});
-  liked.push(images[index]);
-  localStorage.setItem("likedCats", JSON.stringify(liked));
-  showLiked();
-
-  card.style.transform = "translateX(400px) rotate(25deg)";
-  setTimeout(() => {
-    index++;
-    renderCard();
-    resetCard();
-  }, 300);
-}
-
-function doDislike() {
-  history.push({idx: index, liked: false});
-
-  card.style.transform = "translateX(-400px) rotate(-25deg)";
-  setTimeout(() => {
-    index++;
-    renderCard();
-    resetCard();
-  }, 300);
-}
-
-function undo() {
-  const last = history.pop();
-  if (!last) return;
-
-  index = last.idx;
-
-  if (last.liked) {
-    liked.pop();
-    localStorage.setItem("likedCats", JSON.stringify(liked));
-    showLiked();
-  }
-
-  renderCard();
-}
-
-likeBtn.onclick = doLike;
-dislikeBtn.onclick = doDislike;
-undoBtn.onclick = undo;
-
-// mouse
-card.onmousedown = e => {
-  pointerDown(e.clientX);
-
-  const move = ev => pointerMove(ev.clientX);
-  const up = ev => {
-    pointerUp(ev.clientX);
-    window.removeEventListener("mousemove", move);
-    window.removeEventListener("mouseup", up);
-  };
-
-  window.addEventListener("mousemove", move);
-  window.addEventListener("mouseup", up);
-};
-
-// touch
-card.addEventListener("touchstart", e => pointerDown(e.touches[0].clientX), {passive: true});
-card.addEventListener("touchmove", e => {
-  e.preventDefault();
-  pointerMove(e.touches[0].clientX);
-}, {passive: false});
-card.addEventListener("touchend", e => pointerUp(e.changedTouches[0].clientX));
-
-// INIT
-generateImages();
-showLiked();
-renderCard();
+});
