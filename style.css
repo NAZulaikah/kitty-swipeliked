@@ -1,188 +1,215 @@
+/* GLOBAL */
 body {
-  font-family: 'Segoe UI', sans-serif;
-  margin:0;
-  padding:0;
-  background: linear-gradient(180deg, #ffe0f0, #f9d0ff);
-  color:#333;
+  margin: 0;
+  font-family: Poppins, Arial, sans-serif;
+  background: linear-gradient(180deg, #ffb3d1, #d7b2ff);
+  min-height: 100vh;
+  overflow-x: hidden;
+  color: #333;
 }
 
-header {
-  text-align:center;
-  padding:1rem;
-  background:#ff7eb9;
-  color:white;
-  font-size:1.6rem;
-  font-weight:bold;
+.topbar {
+  background: #ff69b4;
+  color: white;
+  text-align: center;
+  padding: 16px;
+  font-size: 22px;
+  font-weight: bold;
+  position: sticky;
+  top: 0;
 }
 
 .container {
-  max-width:500px;
-  margin:auto;
-  padding:1rem;
+  padding: 20px;
 }
 
-/* Start Button */
-.start-wrap {
-  text-align:center;
-  margin:1rem 0;
+/* LANDING */
+.title {
+  text-align: center;
+  font-size: 24px;
+  margin-bottom: 15px;
 }
 
-.start-btn {
-  background:#ff7eb9;
-  color:white;
-  padding:0.8rem 1.6rem;
-  border-radius:12px;
-  font-size:1.2rem;
-  border:none;
-  cursor:pointer;
-  font-weight:bold;
+.controls-top {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
 }
 
-/* Popup */
-.popup-overlay {
-  position:fixed;
-  top:0; left:0;
-  width:100%; height:100%;
-  background:rgba(0,0,0,0.6);
-  display:none;
-  justify-content:center;
-  align-items:center;
-  padding:1rem;
+.btn {
+  padding: 12px 20px;
+  border-radius: 25px;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
 }
 
-.popup-window {
-  background:white;
-  border-radius:20px;
-  max-width:420px;
-  width:100%;
-  padding:1rem;
-  position:relative;
-  animation:popIn .3s ease;
+.primary {
+  background: #ff69b4;
+  color: white;
 }
 
-@keyframes popIn {
-  0% { transform:scale(0.8); opacity:0; }
-  100% { transform:scale(1); opacity:1; }
+.ghost {
+  background: white;
+  border: 2px solid #ff69b4;
+  color: #ff69b4;
 }
+
+/* GALLERY */
+.liked-section {
+  margin-top: 25px;
+}
+
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.gallery img {
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: transform .2s;
+}
+
+.gallery img:hover {
+  transform: scale(1.05);
+}
+
+/* POPUP SWIPE VIEW */
+.popup {
+  position: fixed;
+  inset: 0;
+  background: rgba(255,255,255,0.95);
+  backdrop-filter: blur(8px);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  z-index: 999;
+}
+
+.hidden { display: none; }
 
 .close-btn {
-  position:absolute;
-  top:10px;
-  right:10px;
-  background:#ff7eb9;
-  color:#fff;
-  border:none;
-  padding:0.3rem 0.6rem;
-  border-radius:8px;
-  cursor:pointer;
+  background: #ff69b4;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 45px;
+  height: 45px;
+  float: right;
+  font-size: 20px;
 }
 
-/* Swipe card */
-.card-container {
-  height:300px;
-  margin-bottom:1rem;
-  position:relative;
+.card-stage {
+  margin-top: 50px;
+  position: relative;
+  display: flex;
+  justify-content: center;
 }
 
 .card {
-  position:absolute;
-  width:100%;
-  height:100%;
-  border-radius:20px;
-  overflow:hidden;
-  box-shadow:0 4px 15px rgba(0,0,0,0.2);
-  background:#fff;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  touch-action:none;
-  transition:transform .3s ease;
+  width: 310px;
+  height: 420px;
+  border-radius: 20px;
+  box-shadow: 0 6px 20px rgba(0,0,0,.2);
+  overflow: hidden;
+  position: absolute;
 }
 
-.card img {
-  width:100%;
-  height:100%;
-  object-fit:cover;
+.front-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .overlay {
-  position:absolute;
-  top:10px;
-  font-size:2.2rem;
-  font-weight:bold;
-  opacity:0;
-  transition:.2s;
+  position: absolute;
+  top: 20px;
+  font-size: 40px;
+  opacity: 0;
+  transition: 0.2s;
 }
 
-.overlay-like { right:10px; color:#4ade80; }
-.overlay-dislike { left:10px; color:#f87171; }
+.overlay-like { left: 20px; color: red; }
+.overlay-dislike { right: 20px; color: #333; }
 
-/* Buttons */
+/* BUTTONS */
 .actions {
-  display:flex;
-  justify-content:center;
-  gap:1rem;
-  margin-bottom:1rem;
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
 }
 
 .round {
-  width:55px; height:55px;
-  border-radius:50%;
-  border:none;
-  color:white;
-  font-size:1.3rem;
-  cursor:pointer;
+  width: 65px;
+  height: 65px;
+  border-radius: 50%;
+  font-size: 26px;
+  border: none;
+  cursor: pointer;
+  background: white;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 
-.btn-red { background:#f87171; }
-.btn-green { background:#4ade80; }
-.btn-undo { background:#ffcc00; }
+.btn-red { color: #e63950; }
+.btn-green { color: #ff69b4; }
 
-/* Progress bar */
-.progress-wrap {
-  text-align:center;
-  margin-bottom:1rem;
-}
-
+/* PROGRESS BAR */
 .progress-bar {
-  width:100%;
-  height:6px;
-  background:#eee;
-  border-radius:4px;
-  overflow:hidden;
+  width: 90%;
+  margin: auto;
+  height: 8px;
+  background: rgba(255,255,255,0.4);
+  border-radius: 4px;
+  overflow: hidden;
 }
 
 .progress-fill {
-  height:100%;
-  width:0%;
-  background:linear-gradient(90deg,#ff7eb9,#a25bff);
+  height: 100%;
+  width: 0%;
+  background: #ff69b4;
+  transition: width .3s;
 }
 
-/* Liked section */
-.liked-header {
-  display:flex;
-  justify-content:space-between;
-  padding:0.5rem 0;
+.progress-text {
+  text-align: center;
+  margin-top: 10px;
+  color: #333;
 }
 
-.btn.ghost {
-  background:white;
-  color:#a25bff;
-  border:2px solid #a25bff;
-  border-radius:10px;
-  padding:0.4rem 0.8rem;
-  cursor:pointer;
+/* LIGHTBOX FULLSCREEN */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
 }
 
-.liked-list {
-  display:flex;
-  flex-wrap:wrap;
-  gap:0.5rem;
+.lightbox img {
+  max-width: 90%;
+  max-height: 90%;
+  border-radius: 12px;
 }
 
-.liked-list img {
-  width:85px;
-  height:85px;
-  border-radius:12px;
-  object-fit:cover;
+.lightbox button {
+  position: absolute;
+  background: rgba(255,255,255,0.7);
+  border: none;
+  padding: 12px 15px;
+  font-size: 26px;
+  border-radius: 10px;
+  cursor: pointer;
 }
+
+.lightbox-close { top: 20px; right: 20px; }
+.lightbox-prev { left: 20px; }
+.lightbox-next { right: 20px; }
