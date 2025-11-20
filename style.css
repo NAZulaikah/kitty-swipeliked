@@ -66,15 +66,16 @@ header {
 }
 
 .close-btn {
-  position:absolute;
-  top:10px;
-  right:10px;
-  background:#ff7eb9;
-  color:#fff;
-  border:none;
-  padding:0.3rem 0.6rem;
-  border-radius:8px;
-  cursor:pointer;
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  background: #ff7eb9;
+  color: #fff;
+  border: none;
+  padding: 0.3rem 0.6rem;
+  border-radius: 8px;
+  cursor: pointer;
+  z-index: 9999;
 }
 
 /* Swipe card */
