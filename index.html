@@ -1,75 +1,79 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Paws & Preferences</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Paws & Preferences — Full</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-<header class="top-collage">
-  <div class="collage">
-    <img src="https://cataas.com/cat?1" />
-    <img src="https://cataas.com/cat?2" />
-    <img src="https://cataas.com/cat?3" />
-    <img src="https://cataas.com/cat?4" />
-  </div>
+  <!-- Collage Header (Design A) -->
+  <header class="top-collage" aria-hidden="false">
+    <div class="collage" aria-hidden="true">
+      <img src="https://cataas.com/cat?1" alt="cat 1" />
+      <img src="https://cataas.com/cat?2" alt="cat 2" />
+      <img src="https://cataas.com/cat?3" alt="cat 3" />
+      <img src="https://cataas.com/cat?4" alt="cat 4" />
+    </div>
 
-  <h1>🐾 Paws & Preferences</h1>
-  <h6>Find Your Favourite Kitty</h6>
-</header>
+    <div class="header-text">
+      <h1>🐾 Paws & Preferences</h1>
+      <h6>Find Your Favourite Kitty</h6>
+    </div>
+  </header>
 
-<main class="container">
+  <main class="container">
+    <div class="controls">
+      <button id="openSwipeBtn" class="btn btn-primary">Start Swiping</button>
+      <button id="clearBtn" class="btn btn-ghost">Clear Likes</button>
+    </div>
 
-  <!-- Open Popup Button -->
-  <div class="start-wrap">
-    <button id="openSwipe" class="btn start-btn">Start Swiping</button>
-  </div>
+    <section aria-label="Your liked cats">
+      <h3 class="liked-title">Your liked cats • <span id="likedCount">0</span></h3>
+      <div id="gallery" class="gallery" aria-live="polite"></div>
+    </section>
+  </main>
 
-  <!-- Liked Images -->
-  <div class="liked-header">
-    <div id="likedCount">❤️ 0 cats</div>
-    <button id="clearBtn" class="btn ghost">Clear Likes</button>
-  </div>
+  <!-- Swipe popup (fullscreen on small screens) -->
+  <div id="popupOverlay" class="popup-overlay" aria-hidden="true">
+    <div class="popup-card" role="dialog" aria-modal="true" aria-label="Swipe cats">
+      <!-- floating close button (centered at top) -->
+      <button id="closePopup" class="popup-close" aria-label="Close">✖</button>
 
-  <div id="likedList" class="liked-list"></div>
+      <div class="swipe-stage">
+        <div id="swipeCard" class="swipe-card" role="group" aria-label="Cat card">
+          <img id="swipeImage" src="" alt="A cat image" />
+          <div id="overlayLike" class="overlay-indicator overlay-like">LIKE</div>
+          <div id="overlayDislike" class="overlay-indicator overlay-dislike">NOPE</div>
+        </div>
 
-</main>
+        <div class="actions">
+          <button id="btnDislike" class="round round-red" title="Dislike">✖</button>
+          <button id="btnUndo" class="round round-undo" title="Undo">↺</button>
+          <button id="btnLike" class="round round-green" title="Like">❤</button>
+        </div>
 
-<!-- POPUP SWIPE WINDOW -->
-<div id="swipePopup" class="popup-overlay">
-  <div class="popup-window">
-
-    <button id="closePopup" class="close-btn">✖</button>
-
-    <!-- Swipe card -->
-    <div class="card-container">
-      <div id="card" class="card">
-        <img id="cardImage" src="" alt="cat" draggable="false">
-        <div class="overlay overlay-like">❤️</div>
-        <div class="overlay overlay-dislike">✖️</div>
+        <div class="progress">
+          <div id="progText" class="progress-text">Cat 1 of 15</div>
+          <div class="progress-bar"><div id="progFill" class="progress-fill" style="width:0%"></div></div>
+        </div>
       </div>
     </div>
-
-    <!-- Action buttons -->
-    <div class="actions">
-      <button id="dislikeBtn" class="round btn-red">✖</button>
-      <button id="undoBtn" class="round btn-undo">↺</button>
-      <button id="likeBtn" class="round btn-green">❤</button>
-    </div>
-
-    <!-- Progress -->
-    <div class="progress-wrap">
-      <div id="progressText">Cat 1 of 15</div>
-      <div class="progress-bar">
-        <div id="progressFill" class="progress-fill"></div>
-      </div>
-    </div>
-
   </div>
-</div>
 
-<script src="script.js"></script>
+  <!-- Fullscreen slideshow lightbox -->
+  <div id="slideshow" class="slideshow-overlay" aria-hidden="true">
+    <button id="closeSlide" class="slideshow-close" aria-label="Close slideshow">Close</button>
+    <div class="slideshow-card">
+      <img id="slideImg" class="slideshow-img" src="" alt="Liked cat full view" />
+    </div>
+    <div class="slideshow-nav">
+      <button id="prevSlide" class="nav-btn" aria-label="Previous">◀</button>
+      <button id="nextSlide" class="nav-btn" aria-label="Next">▶</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
 </body>
 </html>
