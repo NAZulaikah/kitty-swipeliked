@@ -1,195 +1,202 @@
 // CONFIG
-const TOTAL = 15;
-const PRELOAD = 3;
+const TOTAL = 20;
+const PRELOAD_AHEAD = 3;
 
-// ELEMENTS
-const popup = document.getElementById("swipePopup");
-const openSwipe = document.getElementById("openSwipe");
-const closePopup = document.getElementById("closePopup");
-
-const card = document.getElementById("card");
-const cardImage = document.getElementById("cardImage");
-
-const likeBtn = document.getElementById("likeBtn");
-const dislikeBtn = document.getElementById("dislikeBtn");
-const undoBtn = document.getElementById("undoBtn");
-
-const likedListEl = document.getElementById("likedList");
-const likedCountEl = document.getElementById("likedCount");
-const clearBtn = document.getElementById("clearBtn");
-
-const progressText = document.getElementById("progressText");
-const progressFill = document.getElementById("progressFill");
-
-// DATA
+// STATE
 let images = [];
 let index = 0;
-let liked = JSON.parse(localStorage.getItem("likedCats") || "[]");
-let history = [];
+let liked = JSON.parse(localStorage.getItem('likedCats') || '[]');
+let historyStack = [];
 
-// UTIL
+// DOM
+const openSwipeBtn = document.getElementById('openSwipeBtn');
+const popupOverlay = document.getElementById('popupOverlay');
+const closePopup = document.getElementById('closePopup');
+const swipeCard = document.getElementById('swipeCard');
+const swipeImage = document.getElementById('swipeImage');
+const overlayLike = document.getElementById('overlayLike');
+const overlayDislike = document.getElementById('overlayDislike');
+const btnLike = document.getElementById('btnLike');
+const btnDislike = document.getElementById('btnDislike');
+const btnUndo = document.getElementById('btnUndo');
+const progText = document.getElementById('progText');
+const progFill = document.getElementById('progFill');
+
+const gallery = document.getElementById('gallery');
+const likedCount = document.getElementById('likedCount');
+const clearBtn = document.getElementById('clearBtn');
+
+// slideshow
+const slideshow = document.getElementById('slideshow');
+const slideImg = document.getElementById('slideImg');
+const closeSlide = document.getElementById('closeSlide');
+const prevSlide = document.getElementById('prevSlide');
+const nextSlide = document.getElementById('nextSlide');
+let slideIndex = 0;
+
+// HELPERS
 const catURL = () => `https://cataas.com/cat?${Math.random()}`;
-const generateImages = () => images = Array.from({length: TOTAL}, () => catURL());
-
-// ----- POPUP -----
-openSwipe.onclick = () => {
-  popup.style.display = "flex";
-  renderCard();
-};
-closePopup.onclick = () => {
-  popup.style.display = "none";
-  showLiked();
-};
-
-// ----- LIKED SECTION -----
-function showLiked() {
-  likedListEl.innerHTML = "";
-
-  liked.forEach(url => {
-    const img = document.createElement("img");
-    img.src = url;
-    likedListEl.appendChild(img);
-  });
-
-  likedCountEl.textContent = `❤️ ${liked.length} cats`;
+function generateImages(){
+  images = Array.from({length: TOTAL}, ()=>catURL());
 }
-
-clearBtn.onclick = () => {
-  liked = [];
-  localStorage.setItem("likedCats", JSON.stringify(liked));
-  showLiked();
-};
-
-// ----- CARD RENDER -----
-function updateProgress() {
-  progressText.textContent = `Cat ${index + 1} of ${TOTAL}`;
-  progressFill.style.width = `${(index / TOTAL) * 100}%`;
-}
-
-function renderCard() {
-  if (index >= images.length) {
-    index = 0;
-    generateImages();
+function preloadAt(i){
+  for(let j=i;j<Math.min(images.length,i+PRELOAD_AHEAD);j++){
+    const im = new Image();
+    im.src = images[j];
   }
-  cardImage.src = images[index];
+}
+
+// PROGRESS & RENDER
+function updateProgress(){
+  progText.textContent = `Cat ${index+1} of ${TOTAL}`;
+  progFill.style.width = `${Math.round((index/TOTAL)*100)}%`;
+}
+
+function renderSwipe(){
+  if(index >= images.length){ index = 0; generateImages(); }
+  swipeImage.style.opacity = 0;
+  swipeImage.src = images[index];
+  swipeImage.onload = ()=> swipeImage.style.opacity = 1;
+  preloadAt(index+1);
   updateProgress();
 }
 
-// ----- SWIPE LOGIC -----
-let startX = 0;
-let dragging = false;
-
-function pointerDown(x) {
-  dragging = true;
-  startX = x;
-  card.style.transition = "none";
+// GALLERY
+function renderGallery(){
+  gallery.innerHTML = '';
+  liked.forEach((url, i)=>{
+    const btn = document.createElement('button');
+    btn.className = 'tile';
+    btn.type = 'button';
+    btn.dataset.idx = i;
+    const img = document.createElement('img');
+    img.src = url;
+    img.alt = `liked cat ${i+1}`;
+    btn.appendChild(img);
+    btn.onclick = ()=> openSlideshow(i);
+    gallery.appendChild(btn);
+  });
+  likedCount.textContent = liked.length;
+  document.getElementById('likedCount').textContent = liked.length;
+  localStorage.setItem('likedCats', JSON.stringify(liked));
 }
 
-function pointerMove(x) {
-  if (!dragging) return;
-  let dx = x - startX;
-
-  card.style.transform = `translateX(${dx}px) rotate(${dx / 20}deg)`;
-
-  if (dx > 0) showOverlay("like");
-  else showOverlay("dislike");
+// SLIDESHOW
+function openSlideshow(i){
+  if(!liked.length) return;
+  slideIndex = i;
+  slideImg.src = liked[slideIndex];
+  slideshow.style.display = 'flex';
 }
+function closeSlideshow(){ slideshow.style.display = 'none'; }
+function nextInSlideshow(){ if(!liked.length) return; slideIndex = (slideIndex+1) % liked.length; slideImg.src = liked[slideIndex]; }
+function prevInSlideshow(){ if(!liked.length) return; slideIndex = (slideIndex-1 + liked.length) % liked.length; slideImg.src = liked[slideIndex]; }
 
-function pointerUp(x) {
-  if (!dragging) return;
-  dragging = false;
-
-  let dx = x - startX;
-  card.style.transition = "0.3s";
-
-  if (dx > 120) doLike();
-  else if (dx < -120) doDislike();
-  else resetCard();
-}
-
-function resetCard() {
-  card.style.transform = "translateX(0) rotate(0)";
-  hideOverlay();
-}
-
-function showOverlay(type) {
-  document.querySelector(".overlay-like").style.opacity = (type === "like") ? 1 : 0;
-  document.querySelector(".overlay-dislike").style.opacity = (type === "dislike") ? 1 : 0;
-}
-function hideOverlay() {
-  document.querySelector(".overlay-like").style.opacity = 0;
-  document.querySelector(".overlay-dislike").style.opacity = 0;
-}
-
-// ACTIONS
-function doLike() {
-  history.push({idx: index, liked: true});
-  liked.push(images[index]);
-  localStorage.setItem("likedCats", JSON.stringify(liked));
-  showLiked();
-
-  card.style.transform = "translateX(400px) rotate(25deg)";
-  setTimeout(() => {
-    index++;
-    renderCard();
-    resetCard();
-  }, 300);
-}
-
-function doDislike() {
-  history.push({idx: index, liked: false});
-
-  card.style.transform = "translateX(-400px) rotate(-25deg)";
-  setTimeout(() => {
-    index++;
-    renderCard();
-    resetCard();
-  }, 300);
-}
-
-function undo() {
-  const last = history.pop();
-  if (!last) return;
-
-  index = last.idx;
-
-  if (last.liked) {
-    liked.pop();
-    localStorage.setItem("likedCats", JSON.stringify(liked));
-    showLiked();
-  }
-
-  renderCard();
-}
-
-likeBtn.onclick = doLike;
-dislikeBtn.onclick = doDislike;
-undoBtn.onclick = undo;
-
-// mouse
-card.onmousedown = e => {
-  pointerDown(e.clientX);
-
-  const move = ev => pointerMove(ev.clientX);
-  const up = ev => {
-    pointerUp(ev.clientX);
-    window.removeEventListener("mousemove", move);
-    window.removeEventListener("mouseup", up);
-  };
-
-  window.addEventListener("mousemove", move);
-  window.addEventListener("mouseup", up);
+// POPUP controls
+openSwipeBtn.onclick = ()=>{
+  popupOverlay.style.display = 'flex';
+  index = 0;
+  if(images.length === 0) generateImages();
+  renderSwipe();
+  popupOverlay.setAttribute('aria-hidden','false');
+};
+closePopup.onclick = ()=>{
+  popupOverlay.style.display = 'none';
+  popupOverlay.setAttribute('aria-hidden','true');
+  renderGallery();
 };
 
-// touch
-card.addEventListener("touchstart", e => pointerDown(e.touches[0].clientX), {passive: true});
-card.addEventListener("touchmove", e => {
-  e.preventDefault();
-  pointerMove(e.touches[0].clientX);
-}, {passive: false});
-card.addEventListener("touchend", e => pointerUp(e.changedTouches[0].clientX));
+// Clear likes
+clearBtn.onclick = ()=>{
+  liked = [];
+  renderGallery();
+};
 
-// INIT
+// ACTIONS
+function doLike(){
+  historyStack.push({idx:index, liked:true});
+  liked.push(images[index]);
+  renderGallery();
+  swipeCard.style.transition = 'transform 360ms cubic-bezier(.22,.9,.32,1)';
+  swipeCard.style.transform = 'translateX(600px) rotate(20deg)';
+  setTimeout(()=>{ index++; renderSwipe(); swipeCard.style.transform = 'translateX(0) rotate(0)'; swipeCard.style.transition=''; }, 360);
+}
+function doDislike(){
+  historyStack.push({idx:index, liked:false});
+  swipeCard.style.transition = 'transform 360ms cubic-bezier(.22,.9,.32,1)';
+  swipeCard.style.transform = 'translateX(-600px) rotate(-20deg)';
+  setTimeout(()=>{ index++; renderSwipe(); swipeCard.style.transform = 'translateX(0) rotate(0)'; swipeCard.style.transition=''; }, 360);
+}
+function doUndo(){
+  const last = historyStack.pop();
+  if(!last) return;
+  index = last.idx;
+  if(last.liked){
+    liked.pop();
+    renderGallery();
+  }
+  renderSwipe();
+}
+
+btnLike.onclick = doLike;
+btnDislike.onclick = doDislike;
+btnUndo.onclick = doUndo;
+
+// SWIPE gestures
+let startX=0, startY=0, dragging=false;
+function pointerDown(x,y){
+  dragging=true; startX=x; startY=y; swipeCard.style.transition='none';
+}
+function pointerMove(x,y){
+  if(!dragging) return;
+  const dx = x - startX;
+  const dy = y - startY;
+  if(Math.abs(dy) > Math.abs(dx) && Math.abs(dy) > 10) return; // vertical scroll guard
+  swipeCard.style.transform = `translateX(${dx}px) rotate(${dx/18}deg)`;
+  const ratio = Math.min(1, Math.abs(dx)/120);
+  if(dx>0){ overlayLike.style.opacity = ratio; overlayDislike.style.opacity = 0; }
+  else { overlayDislike.style.opacity = ratio; overlayLike.style.opacity = 0; }
+}
+function pointerUp(x,y){
+  if(!dragging) return;
+  dragging=false;
+  swipeCard.style.transition = 'transform 300ms cubic-bezier(.22,.9,.32,1)';
+  const dx = x - startX;
+  if(dx > 120) doLike();
+  else if(dx < -120) doDislike();
+  else { swipeCard.style.transform = 'translateX(0) rotate(0)'; overlayLike.style.opacity = 0; overlayDislike.style.opacity = 0; }
+}
+
+swipeCard.addEventListener('touchstart', e=>pointerDown(e.touches[0].clientX,e.touches[0].clientY), {passive:true});
+swipeCard.addEventListener('touchmove', e=>{ e.preventDefault(); pointerMove(e.touches[0].clientX,e.touches[0].clientY); }, {passive:false});
+swipeCard.addEventListener('touchend', e=>pointerUp(e.changedTouches[0].clientX,e.changedTouches[0].clientY));
+
+swipeCard.addEventListener('mousedown', e=>{
+  pointerDown(e.clientX,e.clientY);
+  const move = ev=>pointerMove(ev.clientX,ev.clientY);
+  const up = ev=>{ pointerUp(ev.clientX,ev.clientY); window.removeEventListener('mousemove',move); window.removeEventListener('mouseup',up); };
+  window.addEventListener('mousemove',move);
+  window.addEventListener('mouseup',up);
+});
+
+// Slideshow controls
+closeSlide.onclick = closeSlideshow;
+nextSlide.onclick = nextInSlideshow;
+prevSlide.onclick = prevInSlideshow;
+
+// keyboard shortcuts
+window.addEventListener('keydown', e=>{
+  if(slideshow.style.display === 'flex'){
+    if(e.key === 'ArrowRight') nextInSlideshow();
+    if(e.key === 'ArrowLeft') prevInSlideshow();
+    if(e.key === 'Escape') closeSlideshow();
+  }
+  if(popupOverlay.style.display === 'flex'){
+    if(e.key === 'Escape') { popupOverlay.style.display = 'none'; popupOverlay.setAttribute('aria-hidden','true'); renderGallery(); }
+  }
+});
+
+// init
 generateImages();
-showLiked();
-renderCard();
+renderGallery();
+renderSwipe();
