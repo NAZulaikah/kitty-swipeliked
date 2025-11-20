@@ -1,189 +1,37 @@
-body {
-  font-family: 'Segoe UI', sans-serif;
-  margin:0;
-  padding:0;
-  background: linear-gradient(180deg, #ffe0f0, #f9d0ff);
-  color:#333;
-}
-
-header {
+/* === Collage Header === */
+.top-collage {
   text-align:center;
-  padding:1rem;
-  background:#ff7eb9;
-  color:white;
-  font-size:1.6rem;
-  font-weight:bold;
+  padding:1.5rem 0 1rem;
+  background: linear-gradient(135deg, #ffd6e8, #e4c6ff);
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
 }
 
-.container {
-  max-width:500px;
-  margin:auto;
-  padding:1rem;
-}
-
-/* Start Button */
-.start-wrap {
-  text-align:center;
-  margin:1rem 0;
-}
-
-.start-btn {
-  background:#ff7eb9;
-  color:white;
-  padding:0.8rem 1.6rem;
-  border-radius:12px;
-  font-size:1.2rem;
-  border:none;
-  cursor:pointer;
-  font-weight:bold;
-}
-
-/* Popup */
-.popup-overlay {
-  position:fixed;
-  top:0; left:0;
-  width:100%; height:100%;
-  background:rgba(0,0,0,0.6);
-  display:none;
-  justify-content:center;
-  align-items:center;
-  padding:1rem;
-}
-
-.popup-window {
-  background:white;
-  border-radius:20px;
-  max-width:420px;
-  width:70%;
-  padding:1rem;
-  position:relative;
-  animation:popIn .3s ease;
-}
-
-@keyframes popIn {
-  0% { transform:scale(0.8); opacity:0; }
-  100% { transform:scale(1); opacity:1; }
-}
-
-.close-btn {
-  position: fixed;
-  top: 10px;
-  right: 10px;
-  background: #ff7eb9;
-  color: #fff;
-  border: none;
-  padding: 0.3rem 0.6rem;
-  border-radius: 8px;
-  cursor: pointer;
-  z-index: 9999;
-}
-
-/* Swipe card */
-.card-container {
-  height:300px;
-  margin-bottom:1rem;
-  position:relative;
-}
-
-.card {
-  position:absolute;
-  width:100%;
-  height:100%;
-  border-radius:20px;
-  overflow:hidden;
-  box-shadow:0 4px 15px rgba(0,0,0,0.2);
-  background:#fff;
+.collage {
   display:flex;
   justify-content:center;
-  align-items:center;
-  touch-action:none;
-  transition:transform .3s ease;
+  gap:0.6rem;
+  margin-bottom:0.8rem;
 }
 
-.card img {
-  width:100%;
-  height:100%;
-  object-fit:cover;
-}
-
-.overlay {
-  position:absolute;
-  top:10px;
-  font-size:2.2rem;
-  font-weight:bold;
-  opacity:0;
-  transition:.2s;
-}
-
-.overlay-like { right:10px; color:#4ade80; }
-.overlay-dislike { left:10px; color:#f87171; }
-
-/* Buttons */
-.actions {
-  display:flex;
-  justify-content:center;
-  gap:5rem;
-  margin-bottom:5rem;
-}
-
-.round {
-  width:55px; height:55px;
+.collage img {
+  width:70px;
+  height:70px;
   border-radius:50%;
-  border:none;
-  color:white;
-  font-size:1.3rem;
-  cursor:pointer;
-}
-
-.btn-red { background:#f87171; }
-.btn-green { background:#4ade80; }
-.btn-undo { background:#ffcc00; }
-
-/* Progress bar */
-.progress-wrap {
-  text-align:center;
-  margin-bottom:1rem;
-}
-
-.progress-bar {
-  width:100%;
-  height:6px;
-  background:#eee;
-  border-radius:4px;
-  overflow:hidden;
-}
-
-.progress-fill {
-  height:100%;
-  width:0%;
-  background:linear-gradient(90deg,#ff7eb9,#a25bff);
-}
-
-/* Liked section */
-.liked-header {
-  display:flex;
-  justify-content:space-between;
-  padding:0.5rem 0;
-}
-
-.btn.ghost {
-  background:white;
-  color:#a25bff;
-  border:2px solid #a25bff;
-  border-radius:10px;
-  padding:0.4rem 0.8rem;
-  cursor:pointer;
-}
-
-.liked-list {
-  display:flex;
-  flex-wrap:wrap;
-  gap:0.5rem;
-}
-
-.liked-list img {
-  width:85px;
-  height:85px;
-  border-radius:12px;
   object-fit:cover;
+  border:4px solid white;
+  box-shadow:0 4px 12px rgba(0,0,0,0.15);
+  transform:translateY(0);
+}
+
+.collage img:nth-child(1) { transform:translateY(-5px); }
+collage img:nth-child(2) { transform:translateY(5px); }
+.collage img:nth-child(3) { transform:translateY(-3px); }
+.collage img:nth-child(4) { transform:translateY(4px); }
+
+@media (max-width:480px) {
+  .collage img {
+    width:55px;
+    height:55px;
+  }
 }
