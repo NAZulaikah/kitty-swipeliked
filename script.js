@@ -1,95 +1,202 @@
-const TOTAL = 15;
+// CONFIG
+const TOTAL = 20;
 const PRELOAD_AHEAD = 3;
 
-const startBtn = document.getElementById('startBtn');
-const clearBtn = document.getElementById('clearBtn');
-const doneBtn = document.getElementById('doneBtn');
-
-const landing = document.getElementById('landing');
-const swipeArea = document.getElementById('swipeArea');
-
-const card = document.getElementById('card');
-const cardImage = document.getElementById('cardImage');
-const backCard = document.querySelector('.back-card');
-
-const likeBtn = document.getElementById('likeBtn');
-const dislikeBtn = document.getElementById('dislikeBtn');
-const undoBtn = document.getElementById('undoBtn');
-
-const progressText = document.getElementById('progressText');
-const progressFill = document.getElementById('progressFill');
-
-const likedListEl = document.getElementById('likedList');
-const likedSection = document.getElementById('likedSection');
-
-const likeSound = document.getElementById('likeSound');
-const dislikeSound = document.getElementById('dislikeSound');
-
+// STATE
 let images = [];
 let index = 0;
 let liked = JSON.parse(localStorage.getItem('likedCats') || '[]');
-let history = [];
+let historyStack = [];
 
-function catURL(){ return `https://cataas.com/cat?${Math.random()}`; }
-function generateImages(){ images = Array.from({length: TOTAL},()=>catURL()); }
-function preloadAt(i){ for(let j=i;j<Math.min(images.length,i+PRELOAD_AHEAD);j++){ const img=new Image(); img.src=images[j]; } }
-function updateProgress(){ 
-  progressText.textContent = `Cat ${Math.min(index+1,TOTAL)} of ${TOTAL}`;
-  progressFill.style.width = `${Math.round((index/TOTAL)*100)}%`;
-}
-function showLiked(){
-  if(liked.length===0){ likedSection.classList.add('hidden'); return; }
-  likedSection.classList.remove('hidden');
-  likedListEl.innerHTML = '';
-  liked.forEach(url=>{ const img=document.createElement('img'); img.src=url; img.loading='lazy'; likedListEl.appendChild(img); });
-}
-function renderCard(){
-  if(index>=images.length){ index=0; generateImages(); }
-  const url = images[index];
-  cardImage.style.opacity = 0;
-  cardImage.src = url;
-  cardImage.onload = () => { cardImage.style.opacity = 1; }
+// DOM
+const openSwipeBtn = document.getElementById('openSwipeBtn');
+const popupOverlay = document.getElementById('popupOverlay');
+const closePopup = document.getElementById('closePopup');
+const swipeCard = document.getElementById('swipeCard');
+const swipeImage = document.getElementById('swipeImage');
+const overlayLike = document.getElementById('overlayLike');
+const overlayDislike = document.getElementById('overlayDislike');
+const btnLike = document.getElementById('btnLike');
+const btnDislike = document.getElementById('btnDislike');
+const btnUndo = document.getElementById('btnUndo');
+const progText = document.getElementById('progText');
+const progFill = document.getElementById('progFill');
 
-  const nextUrl = images[index+1]||images[0];
-  backCard.style.background = `url(${nextUrl}) center/cover no-repeat`;
-  backCard.style.backgroundSize = 'cover';
+const gallery = document.getElementById('gallery');
+const likedCount = document.getElementById('likedCount');
+const clearBtn = document.getElementById('clearBtn');
+
+// slideshow
+const slideshow = document.getElementById('slideshow');
+const slideImg = document.getElementById('slideImg');
+const closeSlide = document.getElementById('closeSlide');
+const prevSlide = document.getElementById('prevSlide');
+const nextSlide = document.getElementById('nextSlide');
+let slideIndex = 0;
+
+// HELPERS
+const catURL = () => `https://cataas.com/cat?${Math.random()}`;
+function generateImages(){
+  images = Array.from({length: TOTAL}, ()=>catURL());
+}
+function preloadAt(i){
+  for(let j=i;j<Math.min(images.length,i+PRELOAD_AHEAD);j++){
+    const im = new Image();
+    im.src = images[j];
+  }
+}
+
+// PROGRESS & RENDER
+function updateProgress(){
+  progText.textContent = `Cat ${index+1} of ${TOTAL}`;
+  progFill.style.width = `${Math.round((index/TOTAL)*100)}%`;
+}
+
+function renderSwipe(){
+  if(index >= images.length){ index = 0; generateImages(); }
+  swipeImage.style.opacity = 0;
+  swipeImage.src = images[index];
+  swipeImage.onload = ()=> swipeImage.style.opacity = 1;
   preloadAt(index+1);
   updateProgress();
 }
-function resetCardPosition(){ card.style.transition='none'; card.style.transform='translateX(0) rotate(0)'; hideOverlayIndicator(); requestAnimationFrame(()=>{card.style.transition='';}); }
 
-function showOverlayIndicator(kind){ 
-  if(kind==='like'){ document.querySelector('.overlay-like').style.opacity='1'; } 
-  else{ document.querySelector('.overlay-dislike').style.opacity='1'; } 
+// GALLERY
+function renderGallery(){
+  gallery.innerHTML = '';
+  liked.forEach((url, i)=>{
+    const btn = document.createElement('button');
+    btn.className = 'tile';
+    btn.type = 'button';
+    btn.dataset.idx = i;
+    const img = document.createElement('img');
+    img.src = url;
+    img.alt = `liked cat ${i+1}`;
+    btn.appendChild(img);
+    btn.onclick = ()=> openSlideshow(i);
+    gallery.appendChild(btn);
+  });
+  likedCount.textContent = liked.length;
+  document.getElementById('likedCount').textContent = liked.length;
+  localStorage.setItem('likedCats', JSON.stringify(liked));
 }
-function hideOverlayIndicator(){ document.querySelector('.overlay-like').style.opacity='0'; document.querySelector('.overlay-dislike').style.opacity='0'; }
 
-function playLikeAnimation(){ likeSound.play().catch(()=>{}); card.classList.add('slide-right'); showOverlayIndicator('like'); setTimeout(()=>{card.classList.remove('slide-right'); resetCardPosition();},420);}
-function playDislikeAnimation(){ dislikeSound.play().catch(()=>{}); card.classList.add('slide-left'); showOverlayIndicator('dislike'); setTimeout(()=>{card.classList.remove('slide-left'); resetCardPosition();},420); }
+// SLIDESHOW
+function openSlideshow(i){
+  if(!liked.length) return;
+  slideIndex = i;
+  slideImg.src = liked[slideIndex];
+  slideshow.style.display = 'flex';
+}
+function closeSlideshow(){ slideshow.style.display = 'none'; }
+function nextInSlideshow(){ if(!liked.length) return; slideIndex = (slideIndex+1) % liked.length; slideImg.src = liked[slideIndex]; }
+function prevInSlideshow(){ if(!liked.length) return; slideIndex = (slideIndex-1 + liked.length) % liked.length; slideImg.src = liked[slideIndex]; }
 
-function doLike(){ history.push({idx:index,liked:true}); liked.push(images[index]); localStorage.setItem('likedCats',JSON.stringify(liked)); showLiked(); playLikeAnimation(); index++; setTimeout(()=>{renderCard();},420); }
-function doDislike(){ history.push({idx:index,liked:false}); playDislikeAnimation(); index++; setTimeout(()=>{renderCard();},420); }
-function undo(){ const last=history.pop(); if(!last) return; index=last.idx; if(last.liked){ liked.pop(); localStorage.setItem('likedCats',JSON.stringify(liked)); showLiked(); } renderCard(); }
+// POPUP controls
+openSwipeBtn.onclick = ()=>{
+  popupOverlay.style.display = 'flex';
+  index = 0;
+  if(images.length === 0) generateImages();
+  renderSwipe();
+  popupOverlay.setAttribute('aria-hidden','false');
+};
+closePopup.onclick = ()=>{
+  popupOverlay.style.display = 'none';
+  popupOverlay.setAttribute('aria-hidden','true');
+  renderGallery();
+};
 
-// swipe gestures
+// Clear likes
+clearBtn.onclick = ()=>{
+  liked = [];
+  renderGallery();
+};
+
+// ACTIONS
+function doLike(){
+  historyStack.push({idx:index, liked:true});
+  liked.push(images[index]);
+  renderGallery();
+  swipeCard.style.transition = 'transform 360ms cubic-bezier(.22,.9,.32,1)';
+  swipeCard.style.transform = 'translateX(600px) rotate(20deg)';
+  setTimeout(()=>{ index++; renderSwipe(); swipeCard.style.transform = 'translateX(0) rotate(0)'; swipeCard.style.transition=''; }, 360);
+}
+function doDislike(){
+  historyStack.push({idx:index, liked:false});
+  swipeCard.style.transition = 'transform 360ms cubic-bezier(.22,.9,.32,1)';
+  swipeCard.style.transform = 'translateX(-600px) rotate(-20deg)';
+  setTimeout(()=>{ index++; renderSwipe(); swipeCard.style.transform = 'translateX(0) rotate(0)'; swipeCard.style.transition=''; }, 360);
+}
+function doUndo(){
+  const last = historyStack.pop();
+  if(!last) return;
+  index = last.idx;
+  if(last.liked){
+    liked.pop();
+    renderGallery();
+  }
+  renderSwipe();
+}
+
+btnLike.onclick = doLike;
+btnDislike.onclick = doDislike;
+btnUndo.onclick = doUndo;
+
+// SWIPE gestures
 let startX=0, startY=0, dragging=false;
-function pointerDown(cx,cy){ dragging=true; startX=cx; startY=cy; card.style.transition='none'; }
-function pointerMove(cx,cy){ if(!dragging) return; const dx=cx-startX; const dy=cy-startY; if(Math.abs(dy)>Math.abs(dx)&&Math.abs(dy)>10) return; const rot=dx/18; card.style.transform=`translateX(${dx}px) rotate(${rot}deg)`; const ratio=Math.min(1,Math.abs(dx)/120); if(dx>0){ document.querySelector('.overlay-like').style.opacity=ratio; document.querySelector('.overlay-dislike').style.opacity=0; } else{ document.querySelector('.overlay-dislike').style.opacity=ratio; document.querySelector('.overlay-like').style.opacity=0; } }
-function pointerUp(cx,cy){ if(!dragging) return; dragging=false; card.style.transition='transform 300ms cubic-bezier(.22,.9,.32,1)'; const dx=cx-startX; if(dx>120){ card.style.transform=`translateX(${window.innerWidth}px) rotate(30deg)`; doLike(); } else if(dx<-120){ card.style.transform=`translateX(-${window.innerWidth}px) rotate(-30deg)`; doDislike(); } else{ resetCardPosition(); } }
+function pointerDown(x,y){
+  dragging=true; startX=x; startY=y; swipeCard.style.transition='none';
+}
+function pointerMove(x,y){
+  if(!dragging) return;
+  const dx = x - startX;
+  const dy = y - startY;
+  if(Math.abs(dy) > Math.abs(dx) && Math.abs(dy) > 10) return; // vertical scroll guard
+  swipeCard.style.transform = `translateX(${dx}px) rotate(${dx/18}deg)`;
+  const ratio = Math.min(1, Math.abs(dx)/120);
+  if(dx>0){ overlayLike.style.opacity = ratio; overlayDislike.style.opacity = 0; }
+  else { overlayDislike.style.opacity = ratio; overlayLike.style.opacity = 0; }
+}
+function pointerUp(x,y){
+  if(!dragging) return;
+  dragging=false;
+  swipeCard.style.transition = 'transform 300ms cubic-bezier(.22,.9,.32,1)';
+  const dx = x - startX;
+  if(dx > 120) doLike();
+  else if(dx < -120) doDislike();
+  else { swipeCard.style.transform = 'translateX(0) rotate(0)'; overlayLike.style.opacity = 0; overlayDislike.style.opacity = 0; }
+}
 
-// event listeners
-startBtn.addEventListener('click',()=>{ landing.classList.add('hidden'); swipeArea.classList.remove('hidden'); generateImages(); renderCard(); });
-clearBtn.addEventListener('click',()=>{ liked=[]; localStorage.setItem('likedCats',JSON.stringify(liked)); showLiked(); });
-likeBtn.addEventListener('click',doLike);
-dislikeBtn.addEventListener('click',doDislike);
-undoBtn.addEventListener('click',undo);
-doneBtn.addEventListener('click',()=>{ swipeArea.classList.add('hidden'); landing.classList.remove('hidden'); showLiked(); });
+swipeCard.addEventListener('touchstart', e=>pointerDown(e.touches[0].clientX,e.touches[0].clientY), {passive:true});
+swipeCard.addEventListener('touchmove', e=>{ e.preventDefault(); pointerMove(e.touches[0].clientX,e.touches[0].clientY); }, {passive:false});
+swipeCard.addEventListener('touchend', e=>pointerUp(e.changedTouches[0].clientX,e.changedTouches[0].clientY));
 
-// touch + mouse
-card.addEventListener('touchstart', e=>pointerDown(e.touches[0].clientX,e.touches[0].clientY),{passive:true});
-card.addEventListener('touchmove', e=>{e.preventDefault(); pointerMove(e.touches[0].clientX,e.touches[0].clientY);},{passive:false});
-card.addEventListener('touchend', e=>pointerUp(e.changedTouches[0].clientX,e.changedTouches[0].clientY));
+swipeCard.addEventListener('mousedown', e=>{
+  pointerDown(e.clientX,e.clientY);
+  const move = ev=>pointerMove(ev.clientX,ev.clientY);
+  const up = ev=>{ pointerUp(ev.clientX,ev.clientY); window.removeEventListener('mousemove',move); window.removeEventListener('mouseup',up); };
+  window.addEventListener('mousemove',move);
+  window.addEventListener('mouseup',up);
+});
 
-card.addEventListener('mousedown', e=>{ pointerDown(e.clientX,e.clientY); const move=ev=>pointerMove(ev.clientX,ev.clientY); const up=ev=>{ pointerUp(ev.clientX,ev.clientY); window.removeEventListener('mousemove',move); window.removeEventListener('mouseup',up); }; window.addEventListener('mousemove',move); window.addEventListener('mouseup',up); });
+// Slideshow controls
+closeSlide.onclick = closeSlideshow;
+nextSlide.onclick = nextInSlideshow;
+prevSlide.onclick = prevInSlideshow;
 
-showLiked();
+// keyboard shortcuts
+window.addEventListener('keydown', e=>{
+  if(slideshow.style.display === 'flex'){
+    if(e.key === 'ArrowRight') nextInSlideshow();
+    if(e.key === 'ArrowLeft') prevInSlideshow();
+    if(e.key === 'Escape') closeSlideshow();
+  }
+  if(popupOverlay.style.display === 'flex'){
+    if(e.key === 'Escape') { popupOverlay.style.display = 'none'; popupOverlay.setAttribute('aria-hidden','true'); renderGallery(); }
+  }
+});
+
+// init
+generateImages();
+renderGallery();
+renderSwipe();
